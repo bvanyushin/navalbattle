@@ -1,0 +1,1 @@
+Simple browser game with computer. Just for fun and practice.
