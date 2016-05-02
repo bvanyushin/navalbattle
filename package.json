@@ -1,0 +1,15 @@
+{
+  "name": "naval-battle",
+  "version": "0.0.1",
+  "description": "Simple naval battle with browser",
+  "main": "buiild/main.js",
+  "scripts": {
+    "test": "eslint src"
+  },
+  "author": "bvanyushin",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint-config-google": "^0.5.0",
+    "webpack": "^1.13.0"
+  }
+}
