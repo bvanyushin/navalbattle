@@ -1,0 +1,59 @@
+
+div {
+  margin: 0;
+  padding: 0;
+}
+
+.row {
+  height: 42px;
+}
+
+.index {
+  margin: 0;
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  border: 1px solid white;
+  text-align: center;
+}
+
+.cell {
+  margin: 0;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  border: 1px solid gray;
+  display: inline-block;
+}
+
+.empty {
+  background-color: lightblue; 
+}
+
+.hit {
+  background-color: darkblue; 
+}
+
+.miss {
+  background-color: pink;
+}
+
+.destroyed {
+  background-color: black;
+}
+
+.row .highlighted {
+  border: 1px solid red;
+}
+
+.ship {
+  margin: 0;
+  width: 40px;
+  height: 40px;
+  background-color: darkblue; 
+  border: 1px solid gray;
+  color:white;
+  line-height: 40px;
+  display: inline-block;
+}
+
