@@ -16,7 +16,6 @@ describe('Ship class ', function() {
       expect(ship.decks[0].destroyed).toBe(false);
       expect(ship.decks[1].destroyed).toBe(false);
     });
-  
   })
   
   describe('method isDestroyed ', function() {

@@ -2,7 +2,10 @@ module.exports = (function() {
   'use strict';
 
   /**
-   * @param {[type]}
+   * creates an instance of Ship
+   *
+   * @constructor
+   * @param {Array} coords - coordinates of ship
    */
   function Ship(coords) {
     var decks = [];
@@ -19,8 +22,6 @@ module.exports = (function() {
   Ship.prototype.isDestroyed = isDestroyed;
   Ship.prototype.hit = hit;
 
-
-
   /**
    * @return {Boolean} - true if all decks in ship are destroyed
    */
@@ -31,8 +32,8 @@ module.exports = (function() {
   }
 
   /**
-   * @param  {[type]}
-   * @return {[type]}
+   * @param  {Array} coords - coordinates of deck to destroy
+   * @return {void}
    */
   function hit(coords) {
     for (var i = 0; i < this.decks.length; i++) {
@@ -43,6 +44,11 @@ module.exports = (function() {
     }
   }
 
+  /**
+   * @param {Array} a - first array to compare
+   * @param {Array} b - second array to compare
+   * @return {Boolean} - true if coordinates are equal
+   */
   function areCoordsEqual(a, b) {
     if (!a || !b) {
       return false;
@@ -52,7 +58,7 @@ module.exports = (function() {
     }
     for (var i = 0; i < a.length; i++) {
       if (a[i] !== b[i]) {
-        return false
+        return false;
       }
     }
     return true;
