@@ -1,4 +1,4 @@
-/* global window */
+/* eslint-env browser*/
 module.exports = (function() {
   'use strict';
 
