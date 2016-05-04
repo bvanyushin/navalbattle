@@ -1,6 +1,6 @@
 /* eslint-env jasmine*/
 
-var Ship = require('.././src/ship');
+var Ship = require('../src/ship');
 var ship;
 
 describe('Ship class ', function() {
