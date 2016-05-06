@@ -32,12 +32,12 @@ module.exports = (function() {
   }
 
   /**
-   * @param  {Array} coords - coordinates of deck to destroy
+   * @param  {Array} coord - coordinates of deck to destroy
    * @return {void}
    */
-  function hit(coords) {
+  function hit(coord) {
     for (var i = 0; i < this.decks.length; i++) {
-      if (areCoordsEqual(this.decks[i].coordinates, coords)) {
+      if (areCoordsEqual(this.decks[i].coordinates, coord)) {
         this.decks[i].destroyed = true;
         return;
       }

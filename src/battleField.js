@@ -21,13 +21,18 @@ module.exports = (function() {
   BattleField.prototype.addShip = addShip;
   BattleField.prototype.shot = shot;
   BattleField.prototype.getShip = getShip;
+  BattleField.prototype.shipCanBeAdded = shipCanBeAdded;
 
   /**
    * adds new ship to the map
    *
    * @param {Array} coords - cordinates of new ship
+   * @return {void}
    */
   function addShip(coords) {
+    if (!this.shipCanBeAdded(coords)) {
+      return;
+    }
     var ship = new Ship(coords);
     for (var i = 0; i < coords.length; i++) {
       var linearCoordinate = coordUtil.coordToIndex(coords[i], this.size);
@@ -58,6 +63,31 @@ module.exports = (function() {
   function getShip(coord) {
     var linearCoordinate = coordUtil.coordToIndex(coord, this.size);
     return this.cells[linearCoordinate].ship;
+  }
+
+  /**
+   * checks if ship can be added in given coordinates
+   *
+   * @param  {Array} coords - coordinates to inspect
+   * @return {Boolean}      - true if can be added
+   */
+  function shipCanBeAdded(coords) {
+    var self = this;
+    if (!coordUtil.areValid(coords, self.size)) {
+      return false;
+    }
+    if (!coordUtil.areConsistent(coords, self.size)) {
+      return false;
+    }
+    for (var i = 0; i < coords.length; i++) {
+      var neighbours = coordUtil.getNeighbourhood(coords[i], self.size, false);
+      for (var j = 0; j < neighbours.length; j++) {
+        if (self.getShip(neighbours[j])) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   return BattleField;
