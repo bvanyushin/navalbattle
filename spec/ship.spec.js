@@ -5,13 +5,13 @@ var ship;
 
 describe('Ship class ', function() {
   beforeEach(function() {
-    ship = new Ship([[1, 1], [1, 2]]);
+    ship = new Ship([11, 12]);
   });
 
   describe('constructor ', function() {
     it('should create ship with coordinates ', function() {
-      expect(ship.decks[0].coordinates).toEqual([1, 1]);
-      expect(ship.decks[1].coordinates).toEqual([1, 2]);
+      expect(ship.decks[0].coordinates).toEqual(11);
+      expect(ship.decks[1].coordinates).toEqual(12);
     });
 
     it('should set all destroyed fields values to false', function() {
@@ -37,14 +37,14 @@ describe('Ship class ', function() {
 
   describe('method hit ', function() {
     it('should set destroyed status of deck to true', function() {
-      ship.hit([1, 1]);
+      ship.hit(11);
       expect(ship.decks[0].destroyed).toBe(true);
       expect(ship.decks[1].destroyed).toBe(false);
     });
 
-    it('should not set destroyed status of deck to false', function() {
+    xit('should not set destroyed status of deck to false', function() {
       ship.decks[0].destroyed = true;
-      ship.hit([1, 1]);
+      ship.hit(11);
       expect(ship.decks[0].destroyed).toBe(true);
       expect(ship.decks[1].destroyed).toBe(false);
     });

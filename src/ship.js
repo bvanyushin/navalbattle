@@ -37,31 +37,12 @@ module.exports = (function() {
    */
   function hit(coord) {
     for (var i = 0; i < this.decks.length; i++) {
-      if (areCoordsEqual(this.decks[i].coordinates, coord)) {
+      if (coord === this.decks[i].coordinates) {
         this.decks[i].destroyed = true;
         return;
       }
     }
   }
-
-  /**
-   * @param {Array} a - first array to compare
-   * @param {Array} b - second array to compare
-   * @return {Boolean} - true if coordinates are equal
-   */
-  function areCoordsEqual(a, b) {
-    if (!a || !b) {
-      return false;
-    }
-    if (a.length !== b.length) {
-      return false;
-    }
-    for (var i = 0; i < a.length; i++) {
-      if (a[i] !== b[i]) {
-        return false;
-      }
-    }
-    return true;
-  }
+  
   return Ship;
 })();

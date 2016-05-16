@@ -35,8 +35,7 @@ module.exports = (function() {
     }
     var ship = new Ship(coords);
     for (var i = 0; i < coords.length; i++) {
-      var linearCoordinate = coordUtil.coordToIndex(coords[i], this.size);
-      this.cells[linearCoordinate].ship = ship;
+      this.cells[coords[i]].ship = ship;
     }
   }
 
@@ -61,8 +60,7 @@ module.exports = (function() {
    * @return {Object} - ship in current cell (null if no such)
    */
   function getShip(coord) {
-    var linearCoordinate = coordUtil.coordToIndex(coord, this.size);
-    return this.cells[linearCoordinate].ship;
+    return this.cells[coord].ship;
   }
 
   /**
@@ -80,7 +78,7 @@ module.exports = (function() {
       return false;
     }
     for (var i = 0; i < coords.length; i++) {
-      var neighbours = coordUtil.getNeighbourhood(coords[i], self.size, false);
+      var neighbours = coordUtil.getNeighbourhood(coords[i], self.size);
       for (var j = 0; j < neighbours.length; j++) {
         if (self.getShip(neighbours[j])) {
           return false;
