@@ -50,3 +50,4 @@ describe('areValid function ', function() {
     expect(cu.areValid(invalid, size)).toEqual(false);
   });
 });
+//Todo тест на граничный элемент neighbours

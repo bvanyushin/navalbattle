@@ -8,8 +8,6 @@ module.exports = (function() {
 
   var battleFieldElement = window.document.getElementById('battle-field');
 
-  var classes = ['empty', 'miss', 'hit', 'destroyed'];
-  
   for (var i = 0; i < size; i++) {
     var row = window.document.createElement('div');
     row.classList.add('row');
@@ -24,12 +22,58 @@ module.exports = (function() {
     battleFieldElement.addEventListener('click', makeShot);
   }
 
+  /**
+   * make a shot in game
+   * 
+   * @param  {Object} event event
+   * @return {void}
+   */
   function makeShot(event) {
-    var numId = parseInt(event.target.id);
-    console.log(numId);
+    var numId = parseInt(event.target.id, 10);
     event.target.classList.remove("empty");
     var shotResult = battleField.shot(numId);
-    console.log(shotResult);
-    event.target.classList.add(shotResult);
+    if (shotResult === 'destroyed') {
+      markDestroyedShip(numId);
+      markBusyCells(numId);
+      if (battleField.thisIsTheEnd()) {
+        gameOver();
+      }
+    } else {
+      event.target.classList.add(shotResult);
+    }
+  }
+
+  /**
+   * Marks destroyed ship's cells as destroyed
+   * 
+   * @param  {Number} coordinate Index of cell
+   * @return {void}
+   */
+  function markDestroyedShip(coordinate) {
+    var shipCoordinates = battleField.getShip(coordinate).coordinates;
+    shipCoordinates.forEach(function(numId){
+      var cell = window.document.getElementById(numId);
+      cell.classList.remove('hit');
+      cell.classList.add('destroyed');
+    })
+  }
+
+  /**
+   * Marks destroyed ship's area cells as missed
+   * 
+   * @param  {Number} coordinate Index of cell
+   * @return {void}
+   */
+  function markBusyCells(coordinate) {
+    var areaCoordinates = battleField.getShipArea(coordinate);
+    areaCoordinates.forEach(function(numId) {
+      var cell = window.document.getElementById(numId);
+      cell.classList.remove('empty');
+      cell.classList.add('miss');
+    });
+  }
+
+  function gameOver() {
+    alert('Game over');
   }
 })();

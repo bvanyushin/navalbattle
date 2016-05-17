@@ -21,7 +21,9 @@ module.exports = (function() {
   BattleField.prototype.addShip = addShip;
   BattleField.prototype.shot = shot;
   BattleField.prototype.getShip = getShip;
+  BattleField.prototype.getShipArea = getShipArea;
   BattleField.prototype.shipCanBeAdded = shipCanBeAdded;
+  BattleField.prototype.thisIsTheEnd = thisIsTheEnd;
 
   /**
    * adds new ship to the map
@@ -63,6 +65,20 @@ module.exports = (function() {
     return this.cells[coord].ship;
   }
 
+  function getShipArea(coordinate) {
+    var self = this;
+    var ship = self.getShip(coordinate);
+    var area = [];
+    var coords = ship.coordinates;
+    for (var i = 0; i < coords.length; i++) {
+      var neighbours = coordUtil.getNeighbourhood(coords[i], self.size);
+      area = area.concat(neighbours);
+    }
+    return area.filter(function(element) {
+      return coords.indexOf(element) < 0;
+    });
+  }
+
   /**
    * checks if ship can be added in given coordinates
    *
@@ -83,6 +99,17 @@ module.exports = (function() {
         if (self.getShip(neighbours[j])) {
           return false;
         }
+      }
+    }
+    return true;
+  }
+
+  function thisIsTheEnd() {
+    // Beautiful friend
+    var self = this;
+    for (var i = 0; i < self.cells.length; i++) {
+      if (self.cells[i].ship && !self.cells[i].ship.isDestroyed()) {
+        return false;
       }
     }
     return true;

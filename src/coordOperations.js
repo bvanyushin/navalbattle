@@ -20,11 +20,16 @@ module.exports = (function() {
     var y = coordinate % size;
     for (var i = -1; i < 2; i++) {
       for (var j = -1; j < 2; j++) {
-        output.push((x - i) * size + y - j);
+        if (x - i < size &&
+            x - i >= 0 &&
+            y - j < size &&
+            y - j >= 0) {
+          output.push((x - i) * size + y - j);
+        }
       }
     }
     output = output.filter(function(e) {
-      return !(e < 0 || e >= size * size - 1);
+      return !(e < 0 || e >= size * size);
     });
     return output;
   }

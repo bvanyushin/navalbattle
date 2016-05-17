@@ -36,6 +36,14 @@ describe('BattleField class ', function() {
     });
   });
 
+  describe('method getArea ', function() {
+    it('should return indexes around given except given', function() {
+      battleField.addShip([11]);
+      var ship = battleField.getShip(11);
+      expect(battleField.getArea(ship)).toEqual([22, 21, 20, 12, 10, 2, 1, 0]);
+    });
+  });
+
   describe('method shot ', function() {
     it('should return "hit" if ship hit, but not destroyed', function() {
       battleField.addShip([0, 1]);
@@ -78,6 +86,16 @@ describe('BattleField class ', function() {
       expect(scattered).toBe(false);
       expect(outOfBounds).toBe(false);
       expect(withGape).toBe(false);
+    });
+  });
+  describe('method isThisTheEnd ', function() {
+    it('should answer if all ships are destroyed', function() {
+      battleField.addShip([11]);
+      var falsyResult = battleField.isThisTheEnd();
+      battleField.shot(11);
+      var truthyResult = battleField.isThisTheEnd();
+      expect(falsyResult).toBe(false);
+      expect(truthyResult).toBe(true);
     });
   });
 });

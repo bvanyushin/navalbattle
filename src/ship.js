@@ -17,6 +17,7 @@ module.exports = (function() {
       decks.push(deck);
     }
     this.decks = decks;
+    this.coordinates = coords;
   }
 
   Ship.prototype.isDestroyed = isDestroyed;

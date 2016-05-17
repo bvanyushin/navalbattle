@@ -21,7 +21,7 @@ module.exports = (function() {
 
   coords = [];
   x = Math.floor(Math.random() * 4 + 5);
-  y = Math.floor(Math.random() * 4);
+  y = 0 //Math.floor(Math.random() * 4);
   coords.push(x * size + y);
   coords.push(x * size + y + 1);
   battleField.addShip(coords);
