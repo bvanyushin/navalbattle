@@ -3,62 +3,31 @@
 'use strict';
 
 var cu = require('../src/coordOperations');
-var size = 3;
-var index = 7;
-var coordinates = [2, 1];
-var center = [1, 1];
-var leftTop = [0, 0];
-var linearA = [[0, 0], [0, 1], [0, 2]];
-var linearB = [[0, 0], [1, 0], [2, 0]];
-var valid = [[0, 0], [1, 1]];
-var invalid = [[-1, -1], [0, 0]];
-var notLinear = [[0, 0], [0, 1], [1, 0]];
-var rightBottom = [size - 1, size - 1];
-var withGape = [[0, 0], [0, 2]];
-var diagonal = [[0, 0], [1, 1], [2, 2]];
-var angle = [[0, 0], [0, 1], [1, 1]];
-
-describe('indexToCoord function ', function() {
-  it('should convert index to coordinates array', function() {
-    expect(cu.indexToCoord(index, size)).toEqual(coordinates);
-  });
-});
-
-describe('coordToIndex function ', function() {
-  it('should convert coordinates array to index', function() {
-    expect(cu.coordToIndex(coordinates, size)).toEqual(index);
-  });
-});
+var size = 10;
+var center = 11;
+var leftTop = 0;
+var linearA = [0, 1, 2];
+var linearB = [0, 10, 20];
+var valid = [0, 1];
+var invalid = [-1, 0];
+var notLinear = [0, 1, 10];
+var rightBottom = [size * size - 1];
+var withGape = [0, 2];
+var diagonal = [0, 11, 22];
+var angle = [0, 1, 11];
 
 describe('getNeighbourhood function', function() {
   it('should return aray with neighbours and cell', function() {
     var result = cu.getNeighbourhood(center, size, false);
-    var expectation = [[2, 2], [2, 1], [2, 0],
-                       [1, 2], [1, 1], [1, 0],
-                       [0, 2], [0, 1], [0, 0]];
-    expect(result).toEqual(expectation);
-  });
-
-  it('should operate with linearIndex in input', function() {
-    var linearCenter = cu.coordToIndex(center, size);
-    var result = cu.getNeighbourhood(linearCenter, size, false);
-    var expectation = [[2, 2], [2, 1], [2, 0],
-                       [1, 2], [1, 1], [1, 0],
-                       [0, 2], [0, 1], [0, 0]];
-    expect(result).toEqual(expectation);
-  });
-
-  it('should convert to linear format if specified', function() {
-    var result = cu.getNeighbourhood(center, size, true);
-    var expectation = [8, 7, 6, 5, 4, 3, 2, 1, 0];
+    var expectation = [22, 21, 20, 12, 11, 10, 2, 1, 0];
     expect(result).toEqual(expectation);
   });
 
   it('should not take elements out of bounds', function() {
-    var resultA = cu.getNeighbourhood(leftTop, size, true);
-    var resultB = cu.getNeighbourhood(rightBottom, size, true);
-    var expectationA = [4, 3, 1, 0];
-    var expectationB = [8, 7, 5, 4];
+    var resultA = cu.getNeighbourhood(leftTop, size);
+    var resultB = cu.getNeighbourhood(rightBottom, size);
+    var expectationA = [11, 10, 1, 0];
+    var expectationB = [99, 98, 89, 88];
     expect(resultA).toEqual(expectationA);
     expect(resultB).toEqual(expectationB);
   });

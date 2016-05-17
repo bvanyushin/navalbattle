@@ -27,7 +27,8 @@ div {
 }
 
 .empty {
-  background-color: lightblue; 
+  background-color: lightblue;
+  cursor: crosshair;
 }
 
 .hit {

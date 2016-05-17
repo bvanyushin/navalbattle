@@ -3,11 +3,10 @@
 
 var BattleField = require('../src/battleField');
 var battleField;
-var size;
+var size = 10;
 
 describe('BattleField class ', function() {
   beforeEach(function() {
-    size = 3;
     battleField = new BattleField(size);
   });
 
@@ -23,62 +22,82 @@ describe('BattleField class ', function() {
 
   describe('method addShip ', function() {
     it('should add Ship with proper coordinates', function() {
-      battleField.addShip([[0, 0], [0, 1]]);
-      expect(battleField.cells[0].ship).toBeDefined;
-      expect(battleField.cells[0].ship).toEqual(battleField.cells[1].ship);
+      battleField.addShip([0, 1]);
+      var shipA = battleField.getShip(0);
+      var shipB = battleField.getShip(1);
+      expect(shipA).toBeDefined();
+      expect(shipA).toEqual(shipB);
     });
   });
 
   describe('method getShip ', function() {
     it('should answer if there is a ship in cell', function() {
-      battleField.addShip([[0, 0], [0, 1]]);
-      expect(battleField.getShip([0, 0])).toBeTruthy;
-      expect(battleField.getShip([1, 0])).toBeFalsy;
+      battleField.addShip([0, 1]);
+      expect(battleField.getShip(0)).toBeTruthy();
+      expect(battleField.getShip(10)).toBeFalsy();
+    });
+  });
+
+  describe('method getShipArea ', function() {
+    it('should return indexes around given except given', function() {
+      battleField.addShip([11]);
+      var expectedArea = [22, 21, 20, 12, 10, 2, 1, 0];
+      expect(battleField.getShipArea(11)).toEqual(expectedArea);
     });
   });
 
   describe('method shot ', function() {
     it('should return "hit" if ship hit, but not destroyed', function() {
-      battleField.addShip([[0, 0], [0, 1]]);
-      var shot = battleField.shot([0, 0]);
+      battleField.addShip([0, 1]);
+      var shot = battleField.shot(0);
       expect(shot).toEqual('hit');
     });
 
     it('should return "destroyed" if ship destroyed', function() {
-      battleField.addShip([[0, 0]]);
-      var shot = battleField.shot([0, 0]);
+      battleField.addShip([0]);
+      var shot = battleField.shot(0);
       expect(shot).toEqual('destroyed');
     });
 
     it('should return "miss" if there is no ship', function() {
-      battleField.addShip([[0, 0]]);
-      var shot = battleField.shot([0, 1]);
+      battleField.addShip([0]);
+      var shot = battleField.shot(1);
       expect(shot).toEqual('miss');
     });
   });
 
   describe('method shipCanBeAdded ', function() {
     it('should answer if a ship can be added to coordinates', function() {
-      var emptyMap = battleField.shipCanBeAdded([[0, 0], [0, 1]]);
-      battleField.addShip([[0, 0], [0, 1]]);
-      var busyCells = battleField.shipCanBeAdded([[0, 0], [0, 1]]);
-      var emptyCellsNoNeighbours = battleField.shipCanBeAdded([[2, 2], [2, 1]]);
-      var emptyCellsWithNeighbours = battleField.shipCanBeAdded([[1, 1], [1, 2]]);
+      var onEmptyMap = battleField.shipCanBeAdded([1]);
+      battleField.addShip([1]);
+      var onBusyCells = battleField.shipCanBeAdded([1]);
+      var onEmptyCellsNoNeighbours = battleField.shipCanBeAdded([3, 4]);
+      var onEmptyCellsWithNeighbours = battleField.shipCanBeAdded([3, 2]);
 
-      expect(emptyMap).toBe.Truthy;
-      expect(emptyCellsNoNeighbours).toBe(true);
-      expect(emptyCellsWithNeighbours).toBe(false);
-      expect(busyCells).toBe(false);
+      expect(onEmptyMap).toBeTruthy();
+      expect(onEmptyCellsNoNeighbours).toBeTruthy();
+      expect(onEmptyCellsWithNeighbours).toBeFalsy();
+      expect(onBusyCells).toBeFalsy();
     });
 
     it('should answer false if coordinates are inapropriate', function() {
-      var outOfBounds = battleField.shipCanBeAdded([[0, -1], [0, 1]]);
-      var withGape = battleField.shipCanBeAdded([[0, 0], [0, 2]]);
-      var scattered = battleField.shipCanBeAdded([[0, 0], [1, 1]]);
+      var outOfBounds = battleField.shipCanBeAdded([-1, 0]);
+      var withGape = battleField.shipCanBeAdded([0, 2]);
+      var scattered = battleField.shipCanBeAdded([0, 11]);
 
-      expect(scattered).toBe(false);
-      expect(outOfBounds).toBe(false);
-      expect(withGape).toBe(false);
+      expect(scattered).toBeFalsy();
+      expect(outOfBounds).toBeFalsy();
+      expect(withGape).toBeFalsy();
+    });
+  });
+  describe('method thisIsTheEnd ', function() {
+    it('should answer if all ships are destroyed', function() {
+      battleField.addShip([11]);
+      var falsyResult = battleField.thisIsTheEnd();
+      battleField.shot(11);
+      var truthyResult = battleField.thisIsTheEnd();
+      expect(falsyResult).toBe(false);
+      expect(truthyResult).toBe(true);
     });
   });
 });
