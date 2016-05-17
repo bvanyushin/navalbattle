@@ -44,6 +44,6 @@ module.exports = (function() {
       }
     }
   }
-  
+
   return Ship;
 })();

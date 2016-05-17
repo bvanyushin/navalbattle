@@ -24,7 +24,7 @@ module.exports = (function() {
 
   /**
    * make a shot in game
-   * 
+   *
    * @param  {Object} event event
    * @return {void}
    */
@@ -45,22 +45,22 @@ module.exports = (function() {
 
   /**
    * Marks destroyed ship's cells as destroyed
-   * 
+   *
    * @param  {Number} coordinate Index of cell
    * @return {void}
    */
   function markDestroyedShip(coordinate) {
     var shipCoordinates = battleField.getShip(coordinate).coordinates;
-    shipCoordinates.forEach(function(numId){
+    shipCoordinates.forEach(function(numId) {
       var cell = window.document.getElementById(numId);
       cell.classList.remove('hit');
       cell.classList.add('destroyed');
-    })
+    });
   }
 
   /**
    * Marks destroyed ship's area cells as missed
-   * 
+   *
    * @param  {Number} coordinate Index of cell
    * @return {void}
    */
@@ -73,7 +73,12 @@ module.exports = (function() {
     });
   }
 
+  /**
+   * Handles end of the game
+   *
+   * @return {void}
+   */
   function gameOver() {
-    alert('Game over');
+    console.log('Game over');
   }
 })();

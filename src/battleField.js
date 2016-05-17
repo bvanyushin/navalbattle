@@ -28,73 +28,83 @@ module.exports = (function() {
   /**
    * adds new ship to the map
    *
-   * @param {Array} coords - cordinates of new ship
+   * @param {Array} coordinates - cordinates of new ship
    * @return {void}
    */
-  function addShip(coords) {
-    if (!this.shipCanBeAdded(coords)) {
+  function addShip(coordinates) {
+    if (!this.shipCanBeAdded(coordinates)) {
       return;
     }
-    var ship = new Ship(coords);
-    for (var i = 0; i < coords.length; i++) {
-      this.cells[coords[i]].ship = ship;
+    var ship = new Ship(coordinates);
+    for (var i = 0; i < coordinates.length; i++) {
+      this.cells[coordinates[i]].ship = ship;
     }
   }
 
   /**
-   * makes a single shot to the cell with given coordinates
+   * makes a single shot to the cell with given coordinate
    *
-   * @param  {Array} coord - coordinates of target cell
+   * @param  {Number} coordinate - coordinates of target cell
    * @return {String}    'hit', 'destroyed' or 'miss'
    */
-  function shot(coord) {
-    var ship = this.getShip(coord);
+  function shot(coordinate) {
+    var ship = this.getShip(coordinate);
     if (ship) {
-      ship.hit(coord);
+      ship.hit(coordinate);
       return ship.isDestroyed() ? 'destroyed' : 'hit';
     }
     return 'miss';
   }
 
   /**
-   * looks for ship in given cell
-   * @param  {Array} coord - coordinates of cell to inspect
+   * looks for ship in cell with given coordinate
+   *
+   * @param  {Number} coordinate - coordinate of cell to inspect
    * @return {Object} - ship in current cell (null if no such)
    */
-  function getShip(coord) {
-    return this.cells[coord].ship;
+  function getShip(coordinate) {
+    return this.cells[coordinate].ship;
   }
 
+  /**
+   * Gets an area around ship located in given coordinate
+   *
+   * @param  {Number} coordinate coordinate of cell with ship
+   * @return {Array}             array of cells coordinates
+   */
   function getShipArea(coordinate) {
     var self = this;
-    var ship = self.getShip(coordinate);
     var area = [];
-    var coords = ship.coordinates;
-    for (var i = 0; i < coords.length; i++) {
-      var neighbours = coordUtil.getNeighbourhood(coords[i], self.size);
+    var ship = self.getShip(coordinate);
+    if (!ship) {
+      return area;
+    }
+    var coordinates = ship.coordinates;
+    for (var i = 0; i < coordinates.length; i++) {
+      var neighbours = coordUtil.getNeighbourhood(coordinates[i], self.size);
       area = area.concat(neighbours);
     }
     return area.filter(function(element) {
-      return coords.indexOf(element) < 0;
+      return coordinates.indexOf(element) < 0;
     });
   }
 
   /**
    * checks if ship can be added in given coordinates
    *
-   * @param  {Array} coords - coordinates to inspect
+   * @param  {Array} coordinates - coordinates to inspect
    * @return {Boolean}      - true if can be added
    */
-  function shipCanBeAdded(coords) {
+  function shipCanBeAdded(coordinates) {
     var self = this;
-    if (!coordUtil.areValid(coords, self.size)) {
+    if (!coordUtil.areValid(coordinates, self.size)) {
       return false;
     }
-    if (!coordUtil.areConsistent(coords, self.size)) {
+    if (!coordUtil.areConsistent(coordinates, self.size)) {
       return false;
     }
-    for (var i = 0; i < coords.length; i++) {
-      var neighbours = coordUtil.getNeighbourhood(coords[i], self.size);
+    for (var i = 0; i < coordinates.length; i++) {
+      var neighbours = coordUtil.getNeighbourhood(coordinates[i], self.size);
       for (var j = 0; j < neighbours.length; j++) {
         if (self.getShip(neighbours[j])) {
           return false;
@@ -104,6 +114,11 @@ module.exports = (function() {
     return true;
   }
 
+  /**
+   * Checks if all ships are destroyed
+   *
+   * @return {Boolean} true if every ship on map is destroyed
+   */
   function thisIsTheEnd() {
     // Beautiful friend
     var self = this;

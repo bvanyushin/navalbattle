@@ -10,9 +10,9 @@ module.exports = (function() {
   /**
    * returns all neighbours of cell, including cell in bounds of given size
    *
-   * @param  {Array}  coordinate     - coordinate of cell (linear or 2D)
-   * @param  {Number} size           - side of 2D map
-   * @return {Array}                - array of cells next to given coordinates
+   * @param  {Number}  coordinate     - coordinate of cell (linear or 2D)
+   * @param  {Number} size            - side of 2D map
+   * @return {Array}                 - array of cells next to given coordinates
    */
   function getNeighbourhood(coordinate, size) {
     var output = [];
@@ -37,14 +37,14 @@ module.exports = (function() {
   /**
    * checks if given coordinates are in bounds of map
    *
-   * @param  {Array} coords - coordinates to check
+   * @param  {Array} coordinates - coordinates to check
    * @param  {Number} size  - size of map
    * @return {Boolean}      - true if coordinates are in bounds
    */
-  function areValid(coords, size) {
-    for (var i = 0; i < coords.length; i++) {
-      if (coords[i] < 0 ||
-          coords[i] >= size * size - 1) {
+  function areValid(coordinates, size) {
+    for (var i = 0; i < coordinates.length; i++) {
+      if (coordinates[i] < 0 ||
+          coordinates[i] >= size * size - 1) {
         return false;
       }
     }
@@ -54,27 +54,24 @@ module.exports = (function() {
   /**
    * checks if given coordinate make a continious line
    *
-   * @param  {Array} coords - coordinates to check
+   * @param  {Array} coordinates - coordinates to check
    * @param  {Number} size  - size of map
    * @return {Boolean}       - true if coorfinates make a line
    */
-  function areConsistent(coords, size) {
-    if (coords.length === 1) {
-      return true;
-    }
-    coords.sort(function(a, b) {
+  function areConsistent(coordinates, size) {
+    coordinates.sort(function(a, b) {
       return a - b;
     });
     var i;
-    for (i = 1; i < coords.length; i++) {
-      var diff = coords[i] - coords[i - 1];
+    for (i = 1; i < coordinates.length; i++) {
+      var diff = coordinates[i] - coordinates[i - 1];
       if ((diff !== size) && (diff !== 1)) {
         return false;
       }
     }
-    for (i = 1; i < coords.length - 1; i++) {
-      var prevDiff = coords[i] - coords[i - 1];
-      var nextDiff = coords[i + 1] - coords[i];
+    for (i = 1; i < coordinates.length - 1; i++) {
+      var prevDiff = coordinates[i] - coordinates[i - 1];
+      var nextDiff = coordinates[i + 1] - coordinates[i];
       if (prevDiff !== nextDiff) {
         return false;
       }

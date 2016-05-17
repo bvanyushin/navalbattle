@@ -26,8 +26,8 @@ describe('getNeighbourhood function', function() {
   it('should not take elements out of bounds', function() {
     var resultA = cu.getNeighbourhood(leftTop, size);
     var resultB = cu.getNeighbourhood(rightBottom, size);
-    var expectationA = [11, 10, 9, 1, 0];
-    var expectationB = [98, 90, 89, 88];
+    var expectationA = [11, 10, 1, 0];
+    var expectationB = [99, 98, 89, 88];
     expect(resultA).toEqual(expectationA);
     expect(resultB).toEqual(expectationB);
   });
@@ -50,4 +50,3 @@ describe('areValid function ', function() {
     expect(cu.areValid(invalid, size)).toEqual(false);
   });
 });
-//Todo тест на граничный элемент neighbours
