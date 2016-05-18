@@ -44,7 +44,7 @@ module.exports = (function() {
   function areValid(coordinates, size) {
     for (var i = 0; i < coordinates.length; i++) {
       if (coordinates[i] < 0 ||
-          coordinates[i] >= size * size - 1) {
+          coordinates[i] >= size * size) {
         return false;
       }
     }

@@ -6,7 +6,7 @@ module.exports = (function() {
 
   var size = settings.mapSize;
 
-  var battleFieldElement = window.document.getElementById('battle-field');
+  var battleFieldElement = window.document.getElementById('<battle-field-1></battle-field-1>');
 
   for (var i = 0; i < size; i++) {
     var row = window.document.createElement('div');

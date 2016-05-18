@@ -5,19 +5,19 @@ module.exports = (function() {
    * creates an instance of Ship
    *
    * @constructor
-   * @param {Array} coords - coordinates of ship
+   * @param {Array} coordinats - coordinates of ship
    */
-  function Ship(coords) {
+  function Ship(coordinates) {
     var decks = [];
-    for (var i = 0; i < coords.length; i++) {
+    for (var i = 0; i < coordinates.length; i++) {
       var deck = {
-        coordinates: coords[i],
+        coordinate: coordinates[i],
         destroyed: false
       };
       decks.push(deck);
     }
     this.decks = decks;
-    this.coordinates = coords;
+    this.coordinates = coordinates;
   }
 
   Ship.prototype.isDestroyed = isDestroyed;
@@ -36,9 +36,9 @@ module.exports = (function() {
    * @param  {Array} coord - coordinates of deck to destroy
    * @return {void}
    */
-  function hit(coord) {
+  function hit(coordinate) {
     for (var i = 0; i < this.decks.length; i++) {
-      if (coord === this.decks[i].coordinates) {
+      if (coordinate === this.decks[i].coordinate) {
         this.decks[i].destroyed = true;
         return;
       }

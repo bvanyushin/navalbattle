@@ -10,8 +10,8 @@ describe('Ship class ', function() {
 
   describe('constructor ', function() {
     it('should create ship with coordinates ', function() {
-      expect(ship.decks[0].coordinates).toEqual(11);
-      expect(ship.decks[1].coordinates).toEqual(12);
+      expect(ship.decks[0].coordinate).toEqual(11);
+      expect(ship.decks[1].coordinate).toEqual(12);
     });
 
     it('should set all destroyed fields values to false', function() {
