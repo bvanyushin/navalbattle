@@ -5,14 +5,14 @@ module.exports = (function() {
    * creates an instance of Ship
    *
    * @constructor
-   * @param {Array} coordinats - coordinates of ship
+   * @param {Array} coordinates - coordinates of ship
    */
   function Ship(coordinates) {
     var decks = [];
     for (var i = 0; i < coordinates.length; i++) {
       var deck = {
         coordinate: coordinates[i],
-        destroyed: false
+        damaged: false
       };
       decks.push(deck);
     }
@@ -21,28 +21,46 @@ module.exports = (function() {
   }
 
   Ship.prototype.isDestroyed = isDestroyed;
-  Ship.prototype.hit = hit;
+  Ship.prototype.damage = damage;
 
   /**
    * @return {Boolean} - true if all decks in ship are destroyed
    */
   function isDestroyed() {
     return this.decks.reduce(function(prev, current) {
-      return prev && current.destroyed;
+      return prev && current.damaged;
     }, true);
   }
 
   /**
-   * @param  {Array} coord - coordinates of deck to destroy
+   * @param  {Array} coordinate - coordinates of deck to destroy
    * @return {void}
    */
-  function hit(coordinate) {
+  function damage(coordinate) {
     for (var i = 0; i < this.decks.length; i++) {
       if (coordinate === this.decks[i].coordinate) {
-        this.decks[i].destroyed = true;
+        this.decks[i].damaged = true;
         return;
       }
     }
+  }
+
+  /**
+   * returns status of current deck of ship
+   * 
+   * @param  {Number} coordinate - index of deck on the map
+   * @return {String}            - Current status of deck
+   */
+  function getDeckStatus(coordinate) {
+    if (this.isDestroyed()) {
+      return 'destroyed';
+    }
+    for (var i = 0; i < this.decks.length; i++) {
+      if (this.decks[i].coordinate = coordinate) {
+        return decks[i].damaged ? 'damaged' : 'intact';
+      }
+    }
+    return 'something bad happened!';
   }
 
   return Ship;

@@ -3,17 +3,18 @@ module.exports = (function() {
 
   var Ship = require('./ship');
   var coordUtil = require('./coordOperations.js');
+  var constants = require('./constants');
+  var size = constants.mapSize;
 
   /**
    * @constructor
-   * @param {Number} size - size of one side of battle field
    */
-  function BattleField(size) {
-    this.size = size;
+  function BattleField() {
     this.cells = [];
     for (var i = 0; i < size * size; i++) {
       this.cells.push({
-        ship: null
+        ship: null,
+        hit: false
       });
     }
   }
@@ -24,6 +25,7 @@ module.exports = (function() {
   BattleField.prototype.getShipArea = getShipArea;
   BattleField.prototype.shipCanBeAdded = shipCanBeAdded;
   BattleField.prototype.thisIsTheEnd = thisIsTheEnd;
+  BattleField.prototype.getCellStatus = getCellStatus;
 
   /**
    * adds new ship to the map
@@ -33,9 +35,11 @@ module.exports = (function() {
    */
   function addShip(coordinates) {
     if (!this.shipCanBeAdded(coordinates)) {
+      alert("can not add the ship here")
       return;
     }
     var ship = new Ship(coordinates);
+    console.log(coordinates)
     for (var i = 0; i < coordinates.length; i++) {
       this.cells[coordinates[i]].ship = ship;
     }
@@ -45,15 +49,14 @@ module.exports = (function() {
    * makes a single shot to the cell with given coordinate
    *
    * @param  {Number} coordinate - coordinates of target cell
-   * @return {String}    'hit', 'destroyed' or 'miss'
+   * @return void
    */
   function shot(coordinate) {
+    cells[coordinate].hit = true;
     var ship = this.getShip(coordinate);
     if (ship) {
-      ship.hit(coordinate);
-      return ship.isDestroyed() ? 'destroyed' : 'hit';
+      ship.damage(coordinate);
     }
-    return 'miss';
   }
 
   /**
@@ -81,7 +84,7 @@ module.exports = (function() {
     }
     var coordinates = ship.coordinates;
     for (var i = 0; i < coordinates.length; i++) {
-      var neighbours = coordUtil.getNeighbourhood(coordinates[i], self.size);
+      var neighbours = coordUtil.getNeighbourhood(coordinates[i]);
       area = area.concat(neighbours);
     }
     return area.filter(function(element) {
@@ -97,14 +100,14 @@ module.exports = (function() {
    */
   function shipCanBeAdded(coordinates) {
     var self = this;
-    if (!coordUtil.areValid(coordinates, self.size)) {
+    if (!coordUtil.areValid(coordinates)) {
       return false;
     }
-    if (!coordUtil.areConsistent(coordinates, self.size)) {
+    if (!coordUtil.areConsistent(coordinates)) {
       return false;
     }
     for (var i = 0; i < coordinates.length; i++) {
-      var neighbours = coordUtil.getNeighbourhood(coordinates[i], self.size);
+      var neighbours = coordUtil.getNeighbourhood(coordinates[i]);
       for (var j = 0; j < neighbours.length; j++) {
         if (self.getShip(neighbours[j])) {
           return false;
@@ -128,6 +131,15 @@ module.exports = (function() {
       }
     }
     return true;
+  }
+
+  //Todo write tests
+  function getCellStatus(coordinate) {
+    var ship = this.getShip(coordinate);
+    if (ship) {
+      return ship.getDeckStatus(coordinate);
+    }
+    return this.cells[coordinate].hit ? 'miss' : 'empty';
   }
 
   return BattleField;

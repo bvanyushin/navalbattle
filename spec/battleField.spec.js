@@ -3,21 +3,19 @@
 
 var BattleField = require('../src/battleField');
 var battleField;
-var size = 10;
+var constants = require('../src/constants');
+var size = constants.mapSize;
 
 describe('BattleField class ', function() {
   beforeEach(function() {
-    battleField = new BattleField(size);
+    battleField = new BattleField();
   });
 
   describe('constructor ', function() {
-    it('should create field with proper num of cells ', function() {
+    it('should create field with proper num of cells taken from constants', function() {
       expect(battleField.cells.length).toEqual(size * size);
     });
 
-    it('should store the size', function() {
-      expect(battleField.size).toEqual(size);
-    });
   });
 
   describe('method addShip ', function() {
@@ -47,10 +45,10 @@ describe('BattleField class ', function() {
   });
 
   describe('method shot ', function() {
-    it('should return "hit" if ship hit, but not destroyed', function() {
+    it('should return "damaged" if ship damaged, but not destroyed', function() {
       battleField.addShip([0, 1]);
       var shot = battleField.shot(0);
-      expect(shot).toEqual('hit');
+      expect(shot).toEqual('damaged');
     });
 
     it('should return "destroyed" if ship destroyed', function() {
@@ -84,10 +82,12 @@ describe('BattleField class ', function() {
       var outOfBounds = battleField.shipCanBeAdded([-1, 0]);
       var withGape = battleField.shipCanBeAdded([0, 2]);
       var scattered = battleField.shipCanBeAdded([0, 11]);
+      var crossingTheBorder = battleField.shipCanBeAdded([9, 10]);
 
       expect(scattered).toBeFalsy();
       expect(outOfBounds).toBeFalsy();
       expect(withGape).toBeFalsy();
+      expect(crossingTheBorder).toBeFalsy();
     });
   });
   describe('method thisIsTheEnd ', function() {

@@ -3,11 +3,13 @@
 'use strict';
 
 var cu = require('../src/coordOperations');
-var size = 10;
+var constants = require('../src/constants');
+var size = constants.mapSize;
 var center = 11;
 var leftTop = 0;
 var linearA = [0, 1, 2];
 var linearB = [0, 10, 20];
+var unLinearA = [9, 10];
 var valid = [0, 1];
 var invalid = [-1, 0];
 var notLinear = [0, 1, 10];
@@ -37,6 +39,7 @@ describe('areConsistent function ', function() {
   it('should check cells to be in line', function() {
     expect(cu.areConsistent(linearA, size)).toEqual(true);
     expect(cu.areConsistent(linearB, size)).toEqual(true);
+    expect(cu.areConsistent(unLinearA, size)).toEqual(false);
     expect(cu.areConsistent(notLinear, size)).toEqual(false);
     expect(cu.areConsistent(withGape, size)).toEqual(false);
     expect(cu.areConsistent(diagonal, size)).toEqual(false);

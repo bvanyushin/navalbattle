@@ -2,9 +2,8 @@ module.exports = (function() {
   'use strict';
 
   var BattleFieldClass = require('./battleField');
-  var settings = require('./settings');
-
-  var size = settings.mapSize;
+  var constants = require('./constants');
+  var size = constants.mapSize;
 
   var battleField = new BattleFieldClass(size);
 
