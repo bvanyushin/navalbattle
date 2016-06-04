@@ -1,7 +1,8 @@
-#stub-pad {
+.world {
+  width: 100%;
   display: flex;
-  justify-content: start;
-  align-items: center;
+  justify-content: center;
+  align-items: center; 
 }
 
 .stub-bf {
@@ -9,10 +10,18 @@
   height: 400px;
 }
 
-#stub-new-ship-pad {
+div.hidden {
+  display: none;
+}
+
+.map {
+  margin: 40px;
+}
+
+.dock {
   border: 3px solid #345678;
-  width: 320px;
-  height: 240px;
+  width: 300px;
+  height: 220px;
   margin: 40px;
   display: flex;
   flex-direction: row;
@@ -63,11 +72,15 @@ div {
 }
 
 .map__cell--damaged {
-  background-color: darkblue; 
+  background-color: #991186; 
 }
 
 .map__cell--miss {
   background-color: pink;
+}
+
+.map__cell--potential {
+  background-color: green;
 }
 
 .map__cell--available {
@@ -79,10 +92,5 @@ div {
 }
 
 .map__cell--intact {
-  background-color: #991186;
+  background-color: #4e5754;
 }
-
-.map__cell--shadow {
-  background-color: #991186;
-}
-

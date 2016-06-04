@@ -7,7 +7,8 @@ module.exports = (function() {
   var cordinatesOperations = {
     getNeighbourhood: getNeighbourhood,
     areValid: areValid,
-    areConsistent: areConsistent
+    areConsistent: areConsistent,
+    getAllCoordinates: getAllCoordinates
   };
 
   //////////
@@ -82,6 +83,24 @@ module.exports = (function() {
       }
     }
     return true;
+  }
+
+  /**
+   * Get coordinates of all cells in array with given params
+   *
+   * @param  {String} direction  direction of array (v)ertical or (h)orizontal
+   * @param  {Number} count      all cells in array count
+   * @param  {Number} position   position of current cell in array (0 is first)
+   * @param  {Number} coordinate coordinate of current cell in array
+   * @return {Array}            array of coordinates of all cells
+   */
+  function getAllCoordinates(direction, count, position, coordinate) {
+    var mutiplicator = (direction === 'v') ? size : 1;
+    var output = [];
+    for (var i = 0; i < count; i++) {
+      output.push(coordinate - (position - i) * mutiplicator);
+    }
+    return output;
   }
 
   return cordinatesOperations;

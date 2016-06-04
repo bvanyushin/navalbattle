@@ -22,6 +22,7 @@ module.exports = (function() {
 
   Ship.prototype.isDestroyed = isDestroyed;
   Ship.prototype.damage = damage;
+  Ship.prototype.getDeckStatus = getDeckStatus;
 
   /**
    * @return {Boolean} - true if all decks in ship are destroyed
@@ -52,12 +53,13 @@ module.exports = (function() {
    * @return {String}            - Current status of deck
    */
   function getDeckStatus(coordinate) {
-    if (this.isDestroyed()) {
+    var self = this;
+    if (self.isDestroyed()) {
       return 'destroyed';
     }
-    for (var i = 0; i < this.decks.length; i++) {
-      if (this.decks[i].coordinate = coordinate) {
-        return decks[i].damaged ? 'damaged' : 'intact';
+    for (var i = 0; i < self.decks.length; i++) {
+      if (self.decks[i].coordinate = coordinate) {
+        return self.decks[i].damaged ? 'damaged' : 'intact';
       }
     }
     return 'something bad happened!';

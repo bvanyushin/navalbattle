@@ -10,9 +10,10 @@ module.exports = (function() {
    * @constructor
    */
   function BattleField() {
-    this.cells = [];
+    var self = this;
+    self.cells = [];
     for (var i = 0; i < size * size; i++) {
-      this.cells.push({
+      self.cells.push({
         ship: null,
         hit: false
       });
@@ -20,6 +21,7 @@ module.exports = (function() {
   }
 
   BattleField.prototype.addShip = addShip;
+  BattleField.prototype.generate = generate;
   BattleField.prototype.shot = shot;
   BattleField.prototype.getShip = getShip;
   BattleField.prototype.getShipArea = getShipArea;
@@ -43,6 +45,37 @@ module.exports = (function() {
     for (var i = 0; i < coordinates.length; i++) {
       this.cells[coordinates[i]].ship = ship;
     }
+  }
+
+  function generate() {
+    var self = this;
+    var x;
+    var y;
+    var coords = [];
+
+    x = Math.floor(Math.random() * 4);
+    y = Math.floor(Math.random() * 4);
+    coords.push(x * size + y);
+    coords.push(x * size + y + 1);
+    self.addShip(coords);
+    console.log(coords);
+
+    coords = [];
+    x = Math.floor(Math.random() * 4 + 5);
+    y = Math.floor(Math.random() * 4);
+    coords.push(x * size + y);
+    coords.push(x * size + y + 1);
+    self.addShip(coords);
+    console.log(coords);
+
+    coords = [];
+    x = Math.floor(Math.random() * 4 + 5);
+    y = Math.floor(Math.random() * 4 + 5);
+    coords.push(x * size + y);
+    coords.push(x * size + y + 1);
+    self.addShip(coords);
+    console.log(coords);
+
   }
 
   /**

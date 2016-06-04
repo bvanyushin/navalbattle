@@ -53,3 +53,15 @@ describe('areValid function ', function() {
     expect(cu.areValid(invalid, size)).toEqual(false);
   });
 });
+
+describe('getAllCoordinates function', function () {
+  it('should return proper array of coordinates for vertical array', function () {
+    var result = cu.getAllCoordinates('v', 3, 1, 55);
+    expect(result).toEqual([45, 55, 65]);
+  });
+
+  it('should return proper array of coordinates for horizontal array', function () {
+    var result = cu.getAllCoordinates('h', 3, 1, 55);
+    expect(result).toEqual([54, 55, 56]);
+  });
+})

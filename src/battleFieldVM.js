@@ -1,25 +1,54 @@
-module.exports = (function () {
+module.exports = (function() {
   'use strict';
 
   var constants = require('./constants');
   var size = constants.mapSize;
+  var fleet = constants.shipsCollection.slice(0);
   var styles = constants.stylesDictionary;
   var BattleField = require('./battleField');
+  var coordUtil = require('./coordOperations.js');
 
-  function BattleFieldVM(battleFieldNodeId) {
-    self = this;
-    self.id = battleFieldNodeId
+  var capturedDeckId = 'unchanged';
+  var draggedElement = null;
+
+
+  /**
+   * constructor
+   *
+   * @param {[type]} prefix [description]
+   */
+  function BattleFieldVM(prefix) {
+    var self = this;
+    self.prefix = prefix;
+    self.id = 'battle-field-' + prefix;
     self.battleField = new BattleField();
-    self.draw = draw;
-    self.reDraw = draw;
-    self.getElement = getElement;
-    self.addShip = addShip;
-    self.getCellClass = getCellClass;
   }
 
+  BattleFieldVM.prototype.draw = draw;
+  BattleFieldVM.prototype.generate = generate;
+  BattleFieldVM.prototype.reDraw = draw;
+  BattleFieldVM.prototype.getCellClass = getCellClass;
+  BattleFieldVM.prototype.addShip = addShip;
+  BattleFieldVM.prototype.coordinateToId = coordinateToId;
+  BattleFieldVM.prototype.idToCoordinate = idToCoordinate;
+
+  BattleFieldVM.prototype.constructMap = initMapConstructor;
+  BattleFieldVM.prototype.constructorCycle = constructorCycle;
+  BattleFieldVM.prototype.finishMapConstructor = finishMapConstructor;
+  BattleFieldVM.prototype.addConstructorListeners = addConstructorListeners;
+
+  BattleFieldVM.prototype.addDragListeners = addDragListeners;
+  BattleFieldVM.prototype.getShipCoordinatesFromEvent = getShipCoordinatesFromEvent;
+  BattleFieldVM.prototype.highlightShip = highlightShip;
+
+  /**
+   * render battle field in node with id = "dattlefield" + prefix
+   *
+   * @return void
+   */
   function draw() {
     var self = this;
-    var battleFieldElement = window.document.getElementById(this.id);
+    var battleFieldElement = window.document.getElementById(self.id);
     battleFieldElement.innerHTML = '';
     battleFieldElement.classList.add(styles.map.main);
     for (var i = 0; i < size; i++) {
@@ -30,17 +59,24 @@ module.exports = (function () {
         cell.classList.add(styles.cell.main);
         var idNum = (i * size + j);
         cell.classList.add(self.getCellClass(idNum));
-        cell.id = idNum;
+        cell.id = self.coordinateToId(idNum);
         row.appendChild(cell);
       }
       battleFieldElement.appendChild(row);
     }
   }
 
+  function generate() {
+    var self = this;
+    self.battleField.generate();
+    self.reDraw();
+  }
+
   function getCellClass(coordinate) {
-    var status = this.battleField.getCellStatus(coordinate);
+    var self = this;
+    var status = self.battleField.getCellStatus(coordinate);
     //Todo check owner
-    var hideShips = false;
+    var hideShips = false;//self.prefix !== 'player';
     if (hideShips) {
       if (status === 'intact') {
         status = 'empty';
@@ -49,73 +85,138 @@ module.exports = (function () {
     return styles.cell[status];
   }
 
-  function constructMap() {
-    var fleet = constants.shipsCollection.slice(0);
-
-  }
-
   function addShip(coords) {
     this.battleField.addShip(coords);
   }
 
-  /**
-   * make a shot in game
-   *
-   * @param  {Object} event event
-   * @return {void}
-   */
-  function makeShot(event) {
-    var numId = parseInt(event.target.id, 10);
-    event.target.classList.remove("empty");
-    var shotResult = battleField.shot(numId);
-    if (shotResult === 'destroyed') {
-      markShip(numId, 'hit', 'destroyed');
-      markBusyCells(numId);
-      if (battleField.thisIsTheEnd()) {
-        gameOver();
+  function coordinateToId(coordinate) {
+    return this.prefix + ':' + coordinate;
+  }
+
+  function idToCoordinate(id) {
+    return parseInt(id.substr(this.prefix.length + 1), 10);
+  }
+
+  function initMapConstructor() {
+    var self = this;
+    var dock = window.document.getElementsByClassName(styles.dock.main)[0];
+    dock.classList.remove('hidden');
+    self.addConstructorListeners();
+    self.constructorCycle(dock);
+  }
+
+  function constructorCycle() {
+    var self = this;
+    var dock = window.document.getElementsByClassName(styles.dock.main)[0];
+    dock.innerHTML = '';
+    var size = fleet.pop();
+    if (size) {
+      var shipV = shipFactory(size, 'vertical');
+      self.addDragListeners(shipV);
+      
+      dock.appendChild(shipV);
+      if (size > 1) {
+        var shipH = shipFactory(size, 'horizontal');
+        self.addDragListeners(shipH);
+        dock.appendChild(shipH);
       }
     } else {
-      event.target.classList.add(shotResult);
+      self.finishMapConstructor(dock);
     }
   }
 
-  /**
-   * Marks destroyed ship's cells as destroyed
-   *
-   * @param  {Number} coordinate Index of cell
-   * @return {void}
-   */
-  function markShip(coordinate, previousMark, newMark) {
-    var shipCoordinates = battleField.getShip(coordinate).coordinates;
-    shipCoordinates.forEach(function(numId) {
-      var cell = window.document.getElementById(numId);
-      cell.classList.remove(previousMark);
-      cell.classList.add(newMark);
-    });
+  function finishMapConstructor() {
+    var dock = window.document.getElementsByClassName(styles.dock.main)[0];
+    dock.innerHTML = '';
+    dock.classList.add('hidden');
   }
 
-  /**
-   * Marks destroyed ship's area cells as missed
-   *
-   * @param  {Number} coordinate Index of cell
-   * @return {void}
-   */
-  function markBusyCells(coordinate) {
-    var areaCoordinates = battleField.getShipArea(coordinate);
-    areaCoordinates.forEach(function(numId) {
-      var cell = window.document.getElementById(numId);
-      cell.classList.remove('empty');
-      cell.classList.add('miss');
-    });
+  function addDragListeners(element) {
+    var self = this
+    element.addEventListener("dragstart", dragStartHandler);
+    element.addEventListener("dragend", dragEndHandler);
+
+    function dragEndHandler(evt) {
+      self.reDraw();
+      draggedElement.style.opacity = '1';
+    }
+
+    function dragStartHandler(evt) {
+      draggedElement = this;
+      draggedElement.style.opacity = '0.4';
+      var dragParams = capturedDeckId.split('-');
+      evt.dataTransfer.setData('direction', dragParams[0]);
+      evt.dataTransfer.setData('decksCount', dragParams[1]);
+      evt.dataTransfer.setData('currentDeck', dragParams[2]);
+    }
   }
 
-  /**
-   * Handles end of the game
-   *
-   * @return {void}
-   */
-  function gameOver() {
-    console.log('Game over');
+  function addConstructorListeners() {
+    var self = this;
+    var battleField = window.document.getElementById(self.id);
+    battleField.addEventListener("drop", dropHandler);
+    battleField.addEventListener("dragleave", dragLeaveHandler);
+    battleField.addEventListener("dragenter", dragEnterHandler);
+    battleField.addEventListener("dragover", dragOverHandler);
+
+    function dragLeaveHandler(evt) {
+      self.reDraw();
+    }
+
+    function dropHandler(evt) {
+      var coordinates = self.getShipCoordinatesFromEvent(evt);
+      if (self.battleField.shipCanBeAdded(coordinates)) {
+        self.battleField.addShip(coordinates);
+        self.constructorCycle();
+      }
+      self.reDraw();
+    }
+
+    function dragEnterHandler(evt) {
+      self.highlightShip(self.getShipCoordinatesFromEvent(evt));    
+    }
+    
+    function dragOverHandler(e) {
+      e.preventDefault();
+    }
+  }
+
+  function getShipCoordinatesFromEvent(evt) {
+    var self = this;
+    var direction = evt.dataTransfer.getData('direction');
+    var decksCount = evt.dataTransfer.getData('decksCount');
+    var currentDeck = evt.dataTransfer.getData('currentDeck');
+    var position = self.idToCoordinate(evt.target.id);
+    return coordUtil.getAllCoordinates(direction, decksCount, currentDeck, position);
+  }
+
+  function highlightShip(coordinates) {
+    var self = this
+    for (var i = 0; i < coordinates.length; i++) {
+      var elm = window.document.getElementById(self.coordinateToId(coordinates[i]));
+      if (elm) {
+        elm.classList.remove(styles.cell.empty);
+        elm.classList.add(styles.cell.potential);
+      }
+    }
+  }
+
+  function shipFactory(size, direction) {
+    var ship = window.document.createElement('div');
+    ship.classList.add(styles.ship.main);
+    ship.classList.add(styles.ship[direction]);
+    ship.draggable = true;
+    for (var i = 0; i < size; i++) {
+      var deck = window.document.createElement('div');
+      deck.classList.add(styles.deck.main);
+      deck.classList.add(styles.deck.new);
+      deck.id = direction[0] + '-' + size + '-' + i;
+      deck.addEventListener('mousedown', function(e) {
+        capturedDeckId = this.id;
+      })
+      ship.appendChild(deck);
+    }
+    return ship;
   }
 
   return BattleFieldVM;
