@@ -1,4 +1,4 @@
-.world {
+#world {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -10,8 +10,8 @@
   height: 400px;
 }
 
-div.hidden {
-  display: none;
+.hidden {
+  display: none !important;
 }
 
 .map {
@@ -94,3 +94,5 @@ div {
 .map__cell--intact {
   background-color: #4e5754;
 }
+
+

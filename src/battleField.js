@@ -6,6 +6,15 @@ module.exports = (function() {
   var constants = require('./constants');
   var size = constants.mapSize;
 
+  BattleField.prototype.addShip = addShip;
+  BattleField.prototype.shot = shot;
+  BattleField.prototype.getShip = getShip;
+  BattleField.prototype.getShipArea = getShipArea;
+  BattleField.prototype.shipCanBeAdded = shipCanBeAdded;
+  BattleField.prototype.thisIsTheEnd = thisIsTheEnd;
+  BattleField.prototype.getCellStatus = getCellStatus;
+  BattleField.prototype.reset = BattleField;
+
   /**
    * @constructor
    */
@@ -19,15 +28,6 @@ module.exports = (function() {
       });
     }
   }
-
-  BattleField.prototype.addShip = addShip;
-  BattleField.prototype.generate = generate;
-  BattleField.prototype.shot = shot;
-  BattleField.prototype.getShip = getShip;
-  BattleField.prototype.getShipArea = getShipArea;
-  BattleField.prototype.shipCanBeAdded = shipCanBeAdded;
-  BattleField.prototype.thisIsTheEnd = thisIsTheEnd;
-  BattleField.prototype.getCellStatus = getCellStatus;
 
   /**
    * adds new ship to the map
@@ -45,37 +45,6 @@ module.exports = (function() {
     for (var i = 0; i < coordinates.length; i++) {
       this.cells[coordinates[i]].ship = ship;
     }
-  }
-
-  function generate() {
-    var self = this;
-    var x;
-    var y;
-    var coords = [];
-
-    x = Math.floor(Math.random() * 4);
-    y = Math.floor(Math.random() * 4);
-    coords.push(x * size + y);
-    coords.push(x * size + y + 1);
-    self.addShip(coords);
-    console.log(coords);
-
-    coords = [];
-    x = Math.floor(Math.random() * 4 + 5);
-    y = Math.floor(Math.random() * 4);
-    coords.push(x * size + y);
-    coords.push(x * size + y + 1);
-    self.addShip(coords);
-    console.log(coords);
-
-    coords = [];
-    x = Math.floor(Math.random() * 4 + 5);
-    y = Math.floor(Math.random() * 4 + 5);
-    coords.push(x * size + y);
-    coords.push(x * size + y + 1);
-    self.addShip(coords);
-    console.log(coords);
-
   }
 
   /**

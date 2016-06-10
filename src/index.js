@@ -1,1 +1,1 @@
-require('./mapMaker.js');
+require('./game.js');
