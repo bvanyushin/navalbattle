@@ -1,60 +1,98 @@
+#world {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+}
+
+.stub-bf {
+  width: 400px;
+  height: 400px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.map {
+  margin: 40px;
+}
+
+.dock {
+  border: 3px solid #345678;
+  width: 300px;
+  height: 220px;
+  margin: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.map__row {
+  height: 42px;
+}
 
 div {
   margin: 0;
   padding: 0;
 }
 
-.row {
-  height: 42px;
+.ship {
+  display: flex;
+  justify-content: start;
 }
 
-.index {
+.ship--horizontal {
+  flex-direction: row;
+}
+
+.ship--vertical {
+  flex-direction: column;
+}
+
+.ship__deck, .map__cell{
+  border: 1px solid #000;
   margin: 0;
   width: 40px;
   height: 40px;
   display: inline-block;
-  border: 1px solid white;
-  text-align: center;
 }
 
-.cell {
-  margin: 0;
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  border: 1px solid gray;
-  display: inline-block;
+.ship__deck--colored {
+  background-color: #434b4d; 
 }
 
-.empty {
-  background-color: lightblue;
-  cursor: crosshair;
+.map__cell--destroyed {
+  background-color: #000;
 }
 
-.hit {
-  background-color: darkblue; 
+.map__cell--empty {
+  background-color: #99e6ff;
 }
 
-.miss {
+.map__cell--damaged {
+  background-color: #991186; 
+}
+
+.map__cell--miss {
   background-color: pink;
 }
 
-.destroyed {
-  background-color: black;
+.map__cell--potential {
+  background-color: green;
 }
 
-.row .highlighted {
-  border: 1px solid red;
+.map__cell--available {
+  background-color: #c7fcec;
 }
 
-.ship {
-  margin: 0;
-  width: 40px;
-  height: 40px;
-  background-color: darkblue; 
-  border: 1px solid gray;
-  color:white;
-  line-height: 40px;
-  display: inline-block;
+.map__cell--unavailable {
+  background-color: #ffccde;
 }
+
+.map__cell--intact {
+  background-color: #4e5754;
+}
+
 
