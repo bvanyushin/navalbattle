@@ -31,7 +31,7 @@ module.exports = (function() {
   };
   var constants = {
     mapSize: 10,
-    shipsCollection: [1, 3, 4],
+    shipsCollection: [1, 1, 1, 2, 2, 2, 3, 3, 4],
     stylesDictionary: stylesDictionary
   };
   return constants;
