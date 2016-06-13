@@ -1,12 +1,10 @@
+/* eslint-env browser*/
 module.exports = (function() {
   'use strict';
 
   var constants = require('./constants');
   var size = constants.mapSize;
-  var fleet = constants.shipsCollection.slice(0);
   var styles = constants.stylesDictionary;
-  var BattleField = require('./battleField');
-  var coordUtil = require('./coordOperations.js');
 
   BattleFieldVM.prototype.draw = draw;
   BattleFieldVM.prototype.reDraw = draw;
@@ -18,7 +16,8 @@ module.exports = (function() {
   /**
    * constructor
    *
-   * @param {[type]} postfix [description]
+   * @param {String} postfix  - postfix to find DOM Node
+   * @param {Object} battleField - battleField object to operate
    */
   function BattleFieldVM(postfix, battleField) {
     var bfvm = this;
@@ -30,13 +29,13 @@ module.exports = (function() {
   /**
    * render battle field in node with id = "battlefield" + postfix
    *
-   * @return void
+   * @return {void}
    */
   function draw() {
     var bfvm = this;
     var battleFieldElement = window.document.getElementById(bfvm.id);
     if (!battleFieldElement) {
-      return
+      return;
     }
     battleFieldElement.innerHTML = '';
     battleFieldElement.classList.add(styles.map.main);
@@ -64,8 +63,8 @@ module.exports = (function() {
   function getCellClass(coordinate) {
     var bfvm = this;
     var status = bfvm.battleField.getCellStatus(coordinate);
-    //Todo check owner
-    var hideShips = false; //bfvm.postfix !== 'player';
+    // Owner to be checked later
+    var hideShips = false; // bfvm.postfix !== 'player';
     if (hideShips) {
       if (status === 'intact') {
         status = 'empty';
@@ -101,16 +100,17 @@ module.exports = (function() {
    * @return {void}
    */
   function highlightCells(coordinates) {
-    var bfvm = this
+    var bfvm = this;
     for (var i = 0; i < coordinates.length; i++) {
-      var elm = window.document.getElementById(bfvm.coordinateToId(coordinates[i]));
+      var elm = window.document.getElementById(
+        bfvm.coordinateToId(coordinates[i])
+      );
       if (elm) {
         elm.classList.remove(styles.cell.empty);
         elm.classList.add(styles.cell.potential);
       }
     }
   }
-
 
   return BattleFieldVM;
 })();

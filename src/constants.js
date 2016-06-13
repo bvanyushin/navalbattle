@@ -11,7 +11,7 @@ module.exports = (function() {
       damaged: 'map__cell--damaged',
       destroyed: 'map__cell--destroyed',
       miss: 'map__cell--miss',
-      intact: 'map__cell--intact',
+      intact: 'map__cell--intact'
     },
     ship: {
       main: 'ship',
@@ -28,7 +28,7 @@ module.exports = (function() {
     dock: {
       main: 'dock'
     }
-  }
+  };
   var constants = {
     mapSize: 10,
     shipsCollection: [1, 3, 4],

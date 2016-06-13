@@ -48,7 +48,7 @@ module.exports = (function() {
 
   /**
    * returns status of current deck of ship
-   * 
+   *
    * @param  {Number} coordinate - index of deck on the map
    * @return {String}            - Current status of deck
    */
@@ -58,7 +58,7 @@ module.exports = (function() {
       return 'destroyed';
     }
     for (var i = 0; i < self.decks.length; i++) {
-      if (self.decks[i].coordinate = coordinate) {
+      if (self.decks[i].coordinate === coordinate) {
         return self.decks[i].damaged ? 'damaged' : 'intact';
       }
     }

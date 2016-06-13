@@ -11,8 +11,6 @@ module.exports = (function() {
     getAllCoordinates: getAllCoordinates
   };
 
-  //////////
-
   /**
    * returns all neighbours of cell, including cell in bounds of given size
    *
@@ -67,7 +65,8 @@ module.exports = (function() {
     });
     var i;
     for (i = 1; i < coordinates.length; i++) {
-      if ((coordinates[i] % size === 0) && (coordinates[i] - coordinates[i - 1] === 1)) {
+      if ((coordinates[i] % size === 0) &&
+          (coordinates[i] - coordinates[i - 1] === 1)) {
         return false;
       }
       var diff = coordinates[i] - coordinates[i - 1];

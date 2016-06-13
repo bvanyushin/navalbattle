@@ -37,11 +37,9 @@ module.exports = (function() {
    */
   function addShip(coordinates) {
     if (!this.shipCanBeAdded(coordinates)) {
-      alert("can not add the ship here")
       return;
     }
     var ship = new Ship(coordinates);
-    console.log(coordinates)
     for (var i = 0; i < coordinates.length; i++) {
       this.cells[coordinates[i]].ship = ship;
     }
@@ -51,11 +49,12 @@ module.exports = (function() {
    * makes a single shot to the cell with given coordinate
    *
    * @param  {Number} coordinate - coordinates of target cell
-   * @return void
+   * @return {void}
    */
   function shot(coordinate) {
-    cells[coordinate].hit = true;
-    var ship = this.getShip(coordinate);
+    var self = this;
+    self.cells[coordinate].hit = true;
+    var ship = self.getShip(coordinate);
     if (ship) {
       ship.damage(coordinate);
     }
@@ -135,7 +134,11 @@ module.exports = (function() {
     return true;
   }
 
-  //Todo write tests
+  /**
+   * Find out which status has a cell with a coordinate
+   * @param  {Number} coordinate Coordinate of cell to instect
+   * @return {string}            current status of cell
+   */
   function getCellStatus(coordinate) {
     var ship = this.getShip(coordinate);
     if (ship) {
